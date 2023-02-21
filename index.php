@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if(isset($_SESSION['username'])){
+        header("Location: main.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -21,7 +29,7 @@
                 <p>Jest to serwis umożliwiający wystawianie ofert na pogaduszki.</p><br>
                 <p>Załóż darmowe konto, lub zaloguj się</p>
             </div>
-                <form>
+                <form action="login.php" method="post">
                     <div>
                         <label for="login">Login</label>
                         <input type="text" name="login" id="login" placeholder="eg. k0walski123">
@@ -29,6 +37,12 @@
                         <input type="password" name="password" id="password" placeholder="eg. ********"><br>
                     </div>
                     <input type="submit" value="Log In" class="loginBtn">
+                    <?php
+                        if(isset($_SESSION['loginErr'])){
+                            echo '<p style="color: red;">'.$_SESSION['loginErr'].'</p>';
+                            unset($_SESSION['loginErr']);
+                        }
+                    ?>
                 </form>
             </div>
     </section>

@@ -43,6 +43,14 @@
             $_SESSION['e_checkbox'] = "Nie zaznaczono checkboxa";
         }
 
+//        checking recaptcha
+        $recaptchaResponse = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaKey&response=".$_POST['g-recaptcha-response']);
+        $recaptchaResponse = json_decode($recaptchaResponse, true);
+        if(!$recaptchaResponse['success']){
+            $ok = false;
+            $_SESSION['e_captcha'] = "Nie można być robotem";
+        }
+
         if($ok){
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -67,6 +75,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rejestracja | Roksa 2</title>
     <link rel="stylesheet" href="register.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <form action="register.php" method="post">
@@ -104,6 +113,13 @@
             if(isset($_SESSION['e_checkbox'])){
                 echo "<p style='color: red;'>".$_SESSION['e_checkbox']."</p>";
                 unset($_SESSION['e_checkbox']);
+            }
+        ?>
+        <div class="g-recaptcha" data-sitekey="6LdzhrsjAAAAAHb_OpPtqF8sPlxtmdN-MfhjTtf7"></div>
+        <?php
+            if(isset($_SESSION['e_captcha'])){
+                echo "<p style='color: red;'>".$_SESSION['e_captcha']."</p>";
+                unset($_SESSION['e_captcha']);
             }
         ?>
         <br>

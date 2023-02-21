@@ -33,7 +33,7 @@ form, .block{
     border-radius: 30px;
     font-size: large;
 }
-.signupBtn{
+.signupBtn, input[type="submit"]{
     background: var(--accent);
     padding: 5px;
     border: 5px solid var(--text);
@@ -42,7 +42,7 @@ form, .block{
     transition-duration: 0.4s;
     font-size: large;
 }
-.signupBtn:hover{
+.signupBtn:hover, input[type="submit"]:hover{
     color: var(--background);
     border: 5px solid var(--accent);
     background: var(--elements);
