@@ -31,6 +31,9 @@
                 $_SESSION['e_verify'] = "nie znaleziono";
             }
         }
+    }else{
+        header("Location: index.php");
+        exit();
     }
 ?>
 
