@@ -15,7 +15,7 @@
         }
 
 //        check phone Number
-        $pattern = "/^(\+48)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}$/";
+        $pattern = "/^\d{3}[ -]?\d{3}[ -]?\d{3}$/";
         if($_POST['phone'] == ""){
             $ok = false;
             $_SESSION['e_phone'] = 'pole nie może być puste';
@@ -42,6 +42,21 @@
             $_SESSION['e_cost'] = 'Proszę wpisać samą liczbę';
         }
 
+//        check time of previous
+        {
+            require_once('vars.php');
+            $con = mysqli_connect($dbHost, $dbUsername, $dbPassword, $db);
+            $res = $con->query("SELECT * FROM offers ORDER BY date DESC LIMIT 4");
+            $arrayRes = $res->fetch_assoc();
+            if(isset($arrayRes['date'])){
+                if(time() - $arrayRes['date'] < 600){
+                    $ok = false;
+                    $_SESSION['e_time'] = "Poczekaj 10 minut przed napisaniem kolejnej oferty";
+                }
+            }
+            $con->close();
+        }
+
          if($ok){
              $about = htmlspecialchars($_POST['about'], ENT_QUOTES, 'UTF-8');
              $phone = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
@@ -55,7 +70,7 @@
 
                  require_once('vars.php');
                  $con = mysqli_connect($dbHost, $dbUsername, $dbPassword, $db);
-                 mysqli_query($con, "INSERT INTO offers VALUES (NULL, '$userId', '$about', '$phone', '$cost', '$pictureName')");
+                 mysqli_query($con, "INSERT INTO offers VALUES (NULL, '$userId', '$about', '$phone', '$cost', '$pictureName', '".time()."')");
                  mysqli_close($con);
 
                  header("Location: main.php");
@@ -90,7 +105,14 @@
             }
         ?>
         <label for="phone">Numer telefonu</label>
-        <input type="tel" class="tInput" name="phone" id="phone" placeholder="eg. 000 000 000">
+        <div style="
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        ">
+            <h2>+48</h2><input type="tel" class="tInput" name="phone" id="phone" placeholder="eg. 000 000 000" style="width: 100%;">
+        </div>
         <?php
             if(isset($_SESSION['e_phone'])){
                 echo "<p style='color: red;'>".$_SESSION['e_phone']."</p>";
@@ -114,6 +136,12 @@
             }
         ?>
         <input type="submit" value="Dodaj post" name="submit">
+        <?php
+            if(isset($_SESSION['e_time'])){
+                echo "<p style='color: red;'>".$_SESSION['e_time']."</p>";
+                unset($_SESSION['e_time']);
+            }
+        ?>
     </form>
     <script src="addOffert.js"></script>
 </body>
