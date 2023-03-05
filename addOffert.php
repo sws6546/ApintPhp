@@ -115,5 +115,6 @@
         ?>
         <input type="submit" value="Dodaj post" name="submit">
     </form>
+    <script src="addOffert.js"></script>
 </body>
 </html>

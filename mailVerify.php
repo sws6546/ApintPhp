@@ -31,8 +31,9 @@
                 $_SESSION['e_verify'] = "nie znaleziono";
             }
         }
-    }else{
-        header("Location: index.php");
+    }
+    if(!isset($_COOKIE['email'])){
+        header("index.php");
         exit();
     }
 ?>
