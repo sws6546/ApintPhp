@@ -34,7 +34,7 @@
         <?php
             require_once('vars.php');
             $con = mysqli_connect($dbHost, $dbUsername, $dbPassword, $db);
-            $result = mysqli_query($con, "SELECT users.username, offers.aboutOffer, offers.phoneNumber, offers.cost, offers.pictureName FROM offers LEFT JOIN users on offers.id_user = users.id_user;");
+            $result = mysqli_query($con, "SELECT users.username, offers.aboutOffer, offers.phoneNumber, offers.cost, offers.pictureName FROM offers JOIN users USING (id_user);");
 
             while($arrayRes = $result->fetch_assoc()){
                 echo '<div class="offert">
